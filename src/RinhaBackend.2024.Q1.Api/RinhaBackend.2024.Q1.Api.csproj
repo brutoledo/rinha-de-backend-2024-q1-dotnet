@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RinhaBackend.2024.Q1.Core\RinhaBackend.2024.Q1.Core.csproj" />
+      <ProjectReference Include="..\RinhaBackend.2024.Q1.Infrastructure\RinhaBackend.2024.Q1.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

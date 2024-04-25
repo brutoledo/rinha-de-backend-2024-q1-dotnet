@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace RinhaBackend._2024.Q1.Core.Models;
+namespace RinhaBackend._2024.Q1.Core.Models.Responses;
 
 public class TransactionResponse
 {

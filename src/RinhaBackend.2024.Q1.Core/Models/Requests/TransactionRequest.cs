@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace RinhaBackend._2024.Q1.Core.Models;
+namespace RinhaBackend._2024.Q1.Core.Models.Requests;
 
 public class TransactionRequest : IValidatableObject
 {
-    
     [Required]
     [JsonPropertyName("valor")]
     [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]

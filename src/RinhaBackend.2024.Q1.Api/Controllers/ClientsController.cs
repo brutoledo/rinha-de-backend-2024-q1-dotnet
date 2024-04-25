@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RinhaBackend._2024.Q1.Core.Models;
+using RinhaBackend._2024.Q1.Core.Models.Requests;
+using RinhaBackend._2024.Q1.Core.Models.Responses;
+using RinhaBackend._2024.Q1.Core.Services;
 
 namespace RinhaBackend._2024.Q1.Api.Controllers;
 
@@ -7,49 +9,33 @@ namespace RinhaBackend._2024.Q1.Api.Controllers;
 [Produces("application/json")]
 public class ClientsController : Controller
 {
+    private readonly IBankService _bankService;
+
+    public ClientsController(IBankService bankService)
+    {
+        _bankService = bankService;
+    }
+    
     [HttpGet]
     [Route("clientes/{id}/extrato")]
-    public IActionResult GetExtract([FromRoute] int id)
+    public async Task<IActionResult> GetExtract([FromRoute] int id)
     {
-        var extract = new ExtractResponse()
-        {
-            Balance = new ExtractBalance()
-            {
-                Total = -9098,
-                Date = DateTime.UtcNow,
-                CreditLimit = 100000
-            },
-            Transactions = new List<ExtractTransaction>()
-            {
-                new ExtractTransaction()
-                {
-                    Value = 10,
-                    TransactionDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc),
-                    Type = 'c',
-                    Description = "descricao"
-                },
-                new ExtractTransaction()
-                {
-                    Value = 90000,
-                    TransactionDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc),
-                    Type = 'd',
-                    Description = "descricao"
-                }
-            }
-        };
+        var result = await _bankService.GetClientExtract(id);
         
-        return Ok(extract);
+        return result.Match<IActionResult>(
+            extract => Ok(extract),
+            noClientFound => NotFound());
     }
     
     [HttpPost]
     [Route("clientes/{id}/transacoes")]
-    public IActionResult PostTransaction([FromRoute] int id, [FromBody] TransactionRequest payload)
+    public async Task<IActionResult> PostTransaction([FromRoute] int id, [FromBody] TransactionRequest payload)
     {
-        return Ok(new TransactionResponse()
-        {
-            CreditLimit = 100000,
-            Balance = -9098,
-        });
+        var result = await _bankService.CreateTransaction(id, payload);
+        return result.Match<IActionResult>(
+            transaction => Ok(transaction),
+            noClientFound => NotFound(),
+            transactionOutOfLimit => UnprocessableEntity());
     }
 }
 
