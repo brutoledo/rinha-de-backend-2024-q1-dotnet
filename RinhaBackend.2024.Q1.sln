@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RinhaBackend.2024.Q1.Api", "src\RinhaBackend.2024.Q1.Api\RinhaBackend.2024.Q1.Api.csproj", "{34D0CB20-6D38-44BC-A5C5-EC83971624A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "containerization", "containerization", "{066B5A57-2987-42B1-A5FE-11F0E827B425}"
+	ProjectSection(SolutionItems) = preProject
+		containerization\docker-compose.yml = containerization\docker-compose.yml
+		containerization\nginx.conf = containerization\nginx.conf
+		containerization\init.sql = containerization\init.sql
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RinhaBackend.2024.Q1.Core", "src\RinhaBackend.2024.Q1.Core\RinhaBackend.2024.Q1.Core.csproj", "{BC00BED1-8DDD-46E7-8F82-0F43D59A75CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34D0CB20-6D38-44BC-A5C5-EC83971624A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34D0CB20-6D38-44BC-A5C5-EC83971624A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34D0CB20-6D38-44BC-A5C5-EC83971624A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34D0CB20-6D38-44BC-A5C5-EC83971624A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC00BED1-8DDD-46E7-8F82-0F43D59A75CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC00BED1-8DDD-46E7-8F82-0F43D59A75CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC00BED1-8DDD-46E7-8F82-0F43D59A75CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC00BED1-8DDD-46E7-8F82-0F43D59A75CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,16 @@
+### GET root
+GET {{host}}
+Accept: application/json
+
+### GET extract
+GET {{host}}/clientes/1/extrato
+
+### POST transaction
+POST {{host}}/clientes/1/transacoes
+Content-Type: application/json
+
+{
+  "valor": 1000,
+  "tipo" : "c",
+  "descricao" : "descricao"
+}
