@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using OneOf;
+﻿using OneOf;
 using RinhaBackend._2024.Q1.Core.Models.Errors;
 using RinhaBackend._2024.Q1.Core.Models.Requests;
 using RinhaBackend._2024.Q1.Core.Models.Responses;
@@ -47,14 +46,14 @@ public class BankService : IBankService
 
         return new ExtractResponse()
         {
-            Balance = new ExtractBalance()
+            Balance = new ExtractResponseBalance()
             {
                 Total = client.Balance,
                 Date = DateTime.UtcNow,
                 CreditLimit = client.CreditLimit
             },
             Transactions = client.LastTransaction.Select(t =>
-                new ExtractTransaction()
+                new ExtractResponseTransaction()
                 {
                     Value = t.Value,
                     TransactionDate = DateTime.SpecifyKind(t.CreatedDate, DateTimeKind.Utc),

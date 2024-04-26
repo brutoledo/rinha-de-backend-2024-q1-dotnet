@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RinhaBackend._2024.Q1.Core.Models.Requests;
-using RinhaBackend._2024.Q1.Core.Models.Responses;
 using RinhaBackend._2024.Q1.Core.Services;
 
 namespace RinhaBackend._2024.Q1.Api.Controllers;

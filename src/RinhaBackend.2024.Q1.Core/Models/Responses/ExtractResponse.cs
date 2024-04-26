@@ -5,13 +5,13 @@ namespace RinhaBackend._2024.Q1.Core.Models.Responses;
 public class ExtractResponse
 {
     [JsonPropertyName("saldo")]
-    public ExtractBalance Balance { get; set; }
+    public ExtractResponseBalance Balance { get; set; }
     
     [JsonPropertyName("ultimas_transacoes")]
-    public IList<ExtractTransaction> Transactions { get; set; }
+    public IList<ExtractResponseTransaction> Transactions { get; set; }
 }
 
-public class ExtractBalance
+public class ExtractResponseBalance
 {
     [JsonPropertyName("total")]
     public int Total { get; set; }
@@ -21,7 +21,7 @@ public class ExtractBalance
     public int CreditLimit { get; set; }
 }
 
-public class ExtractTransaction
+public class ExtractResponseTransaction
 {
     [JsonPropertyName("valor")]
     public int Value { get; set; }
