@@ -23,19 +23,11 @@ public class BankService : IBankService
         if (client is null)
             return new NoClientFound();
 
-        var newBalance = client.Balance;
-        switch (request.Type)
-        {
-            case 'c':
-                newBalance += request.Value;
-                break;
-            
-            case 'd':
-                newBalance -= request.Value;
-                break;
-        }
+        if (request.Type == 'd')
+            request.Value *= -1;
 
-        if ((client.CreditLimit * -1) > newBalance) 
+        var balanceForecast = client.Balance + request.Value;
+        if ((client.CreditLimit * -1) > balanceForecast)
             return new TransactionOutOfLimitAllowedFound();
 
         await _clientRepository.CreateTransaction(clientId, request);
@@ -43,13 +35,13 @@ public class BankService : IBankService
         return new TransactionResponse()
         {
             CreditLimit = client.CreditLimit,
-            Balance = newBalance,
+            Balance = balanceForecast,
         };
     }
 
     public async Task<OneOf<ExtractResponse, NoClientFound>> GetClientExtract(int clientId)
     {
-        var client = await _clientRepository.GetById(clientId);
+        var client = await _clientRepository.GetClientExtract(clientId);
         if (client is null)
             return new NoClientFound();
 
@@ -57,27 +49,18 @@ public class BankService : IBankService
         {
             Balance = new ExtractBalance()
             {
-                Total = -9098,
+                Total = client.Balance,
                 Date = DateTime.UtcNow,
-                CreditLimit = 100000
+                CreditLimit = client.CreditLimit
             },
-            Transactions = new List<ExtractTransaction>()
-            {
+            Transactions = client.LastTransaction.Select(t =>
                 new ExtractTransaction()
                 {
-                    Value = 10,
-                    TransactionDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc),
-                    Type = 'c',
-                    Description = "descricao"
-                },
-                new ExtractTransaction()
-                {
-                    Value = 90000,
-                    TransactionDate = DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc),
-                    Type = 'd',
-                    Description = "descricao"
-                }
-            }
+                    Value = t.Value,
+                    TransactionDate = DateTime.SpecifyKind(t.CreatedDate, DateTimeKind.Utc),
+                    Type = t.Type,
+                    Description = t.Description,
+                }).ToList()
         };
     }
 }

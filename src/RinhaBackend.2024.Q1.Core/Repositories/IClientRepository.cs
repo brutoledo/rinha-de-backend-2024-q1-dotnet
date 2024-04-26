@@ -6,5 +6,6 @@ namespace RinhaBackend._2024.Q1.Core.Repositories;
 public interface IClientRepository
 {
     Task<Client?> GetById(int id);
+    Task<ClientExtract?> GetClientExtract(int id);
     Task<int> CreateTransaction(int clientId, TransactionRequest request);
 }

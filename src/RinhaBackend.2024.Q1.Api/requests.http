@@ -5,12 +5,23 @@ Accept: application/json
 ### GET extract
 GET {{host}}/clientes/1/extrato
 
-### POST transaction
+### POST credit transaction
 POST {{host}}/clientes/1/transacoes
 Content-Type: application/json
 
 {
   "valor": 1000,
   "tipo" : "c",
+  "descricao" : "descricao"
+}
+
+
+### POST debit transaction
+POST {{host}}/clientes/1/transacoes
+Content-Type: application/json
+
+{
+  "valor": 1999,
+  "tipo" : "d",
   "descricao" : "descricao"
 }
