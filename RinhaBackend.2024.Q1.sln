@@ -1,19 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RinhaBackend.2024.Q1.Api", "src\RinhaBackend.2024.Q1.Api\RinhaBackend.2024.Q1.Api.csproj", "{34D0CB20-6D38-44BC-A5C5-EC83971624A3}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RinhaBackend.2024.Q1.Api", "src\RinhaBackend.2024.Q1.Api\RinhaBackend.2024.Q1.Api.csproj", "{34D0CB20-6D38-44BC-A5C5-EC83971624A3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "containerization", "containerization", "{066B5A57-2987-42B1-A5FE-11F0E827B425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RinhaBackend.2024.Q1.Core", "src\RinhaBackend.2024.Q1.Core\RinhaBackend.2024.Q1.Core.csproj", "{BC00BED1-8DDD-46E7-8F82-0F43D59A75CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RinhaBackend.2024.Q1.Infrastructure", "src\RinhaBackend.2024.Q1.Infrastructure\RinhaBackend.2024.Q1.Infrastructure.csproj", "{E7026F35-0FE6-45A6-92B1-1BA0CC9EDFFD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RinhaBackend.2024.Q1.Application", "src\RinhaBackend.2024.Q1.Application\RinhaBackend.2024.Q1.Application.csproj", "{FF6A989D-4CC8-41AF-8C21-0CA4B71276BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "containerization", "containerization", "{6E8CD6DD-7534-4A49-A272-36A927DCA65D}"
 	ProjectSection(SolutionItems) = preProject
+		containerization\build.sh = containerization\build.sh
+		containerization\clean.sh = containerization\clean.sh
 		containerization\docker-compose.yml = containerization\docker-compose.yml
-		containerization\nginx.conf = containerization\nginx.conf
-		containerization\init.sql = containerization\init.sql
+		containerization\replicar-db_init.sql.sh = containerization\replicar-db_init.sql.sh
+		containerization\run.sh = containerization\run.sh
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RinhaBackend.2024.Q1.Core", "src\RinhaBackend.2024.Q1.Core\RinhaBackend.2024.Q1.Core.csproj", "{BC00BED1-8DDD-46E7-8F82-0F43D59A75CB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{637E68DD-2CFF-459E-8A74-0ACCB08E279F}"
+	ProjectSection(SolutionItems) = preProject
+		containerization\db\docker-compose.yml = containerization\db\docker-compose.yml
+		containerization\db\init.sql = containerization\db\init.sql
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RinhaBackend.2024.Q1.Infrastructure", "src\RinhaBackend.2024.Q1.Infrastructure\RinhaBackend.2024.Q1.Infrastructure.csproj", "{E7026F35-0FE6-45A6-92B1-1BA0CC9EDFFD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RinhaBackend.2024.Q1.Application", "src\RinhaBackend.2024.Q1.Application\RinhaBackend.2024.Q1.Application.csproj", "{FF6A989D-4CC8-41AF-8C21-0CA4B71276BD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx", "nginx", "{50766037-2957-4065-92C4-62CACECF6530}"
+	ProjectSection(SolutionItems) = preProject
+		containerization\nginx\docker-compose.yml = containerization\nginx\docker-compose.yml
+		containerization\nginx\nginx.conf = containerization\nginx\nginx.conf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,5 +54,15 @@ Global
 		{FF6A989D-4CC8-41AF-8C21-0CA4B71276BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF6A989D-4CC8-41AF-8C21-0CA4B71276BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF6A989D-4CC8-41AF-8C21-0CA4B71276BD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{637E68DD-2CFF-459E-8A74-0ACCB08E279F} = {6E8CD6DD-7534-4A49-A272-36A927DCA65D}
+		{50766037-2957-4065-92C4-62CACECF6530} = {6E8CD6DD-7534-4A49-A272-36A927DCA65D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD07B6C8-9D8F-45A1-8CD4-8AE79B265F7D}
 	EndGlobalSection
 EndGlobal
