@@ -37,6 +37,30 @@ public class BankService : IBankService
             Balance = balanceForecast,
         };
     }
+    
+    public async Task<OneOf<TransactionResponse, NoClientFound, TransactionOutOfLimitAllowedFound>> CreateAtomicTransaction(int clientId, TransactionRequest request)
+    {
+        if (request.Type == 'd')
+            request.Value *= -1;
+        
+        var results = await _clientRepository.CreateAtomicTransaction(clientId, request);
+
+        var status = results.Item1;
+        var creditLimit = results.Item2;
+        var balance = results.Item3;
+        
+        if (status == 0)
+            return new NoClientFound();
+        
+        if (status == -1)
+            return new TransactionOutOfLimitAllowedFound();
+        
+        return new TransactionResponse()
+        {
+            CreditLimit = creditLimit,
+            Balance = balance,
+        };
+    }
 
     public async Task<OneOf<ExtractResponse, NoClientFound>> GetClientExtract(int clientId)
     {

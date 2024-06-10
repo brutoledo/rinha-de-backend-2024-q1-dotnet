@@ -25,3 +25,23 @@ Content-Type: application/json
   "tipo" : "d",
   "descricao" : "descricao"
 }
+
+### POST credit transaction
+POST https://localhost:7195/clientes/1/transacoes
+Content-Type: application/json
+
+{
+  "valor": 1000,
+  "tipo" : "c",
+  "descricao" : "descricao"
+}
+
+### POST credit transaction
+POST https://localhost:7196/clientes/1/transacoes
+Content-Type: application/json
+
+{
+  "valor": 1000,
+  "tipo" : "c",
+  "descricao" : "descricao"
+}

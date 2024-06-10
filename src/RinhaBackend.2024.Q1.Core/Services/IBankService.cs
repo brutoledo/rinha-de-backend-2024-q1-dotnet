@@ -9,5 +9,9 @@ public interface IBankService
 {
     Task<OneOf<TransactionResponse, NoClientFound, TransactionOutOfLimitAllowedFound>> CreateTransaction(int clientId,
         TransactionRequest request);
+
+    Task<OneOf<TransactionResponse, NoClientFound, TransactionOutOfLimitAllowedFound>> CreateAtomicTransaction(
+        int clientId,
+        TransactionRequest request);
     Task<OneOf<ExtractResponse, NoClientFound>> GetClientExtract(int clientId);
 }

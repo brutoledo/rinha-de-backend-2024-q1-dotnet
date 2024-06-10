@@ -16,4 +16,8 @@
       <ProjectReference Include="..\RinhaBackend.2024.Q1.Infrastructure\RinhaBackend.2024.Q1.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="request-2.http" />
+    </ItemGroup>
+
 </Project>

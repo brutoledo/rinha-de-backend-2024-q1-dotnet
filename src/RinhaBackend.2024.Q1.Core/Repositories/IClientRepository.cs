@@ -8,4 +8,5 @@ public interface IClientRepository
     Task<Client?> GetById(int id);
     Task<ClientExtract?> GetClientExtract(int id);
     Task<int> CreateTransaction(int clientId, TransactionRequest request);
+    Task<(int, int, int)> CreateAtomicTransaction(int clientId, TransactionRequest request);
 }
