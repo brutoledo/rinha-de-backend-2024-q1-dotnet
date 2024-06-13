@@ -16,6 +16,7 @@ public class BankService : IBankService
         _clientRepository = clientRepository;
     }
     
+    // Brute force / poor performance / no concurrency handled
     public async Task<OneOf<TransactionResponse, NoClientFound, TransactionOutOfLimitAllowedFound>> CreateTransaction(int clientId, TransactionRequest request)
     {
         var client = await _clientRepository.GetById(clientId);
@@ -38,6 +39,8 @@ public class BankService : IBankService
         };
     }
     
+    // Achieve a bit better performance and handle concurrency by using lock table
+    // Not optimal because do too many database roundtrip within transaction scope
     public async Task<OneOf<TransactionResponse, NoClientFound, TransactionOutOfLimitAllowedFound>> CreateAtomicTransaction(int clientId, TransactionRequest request)
     {
         if (request.Type == 'd')
@@ -49,10 +52,35 @@ public class BankService : IBankService
         var creditLimit = results.Item2;
         var balance = results.Item3;
         
-        if (status == 0)
+        if (status == -1)
             return new NoClientFound();
         
+        if (status == -2)
+            return new TransactionOutOfLimitAllowedFound();
+        
+        return new TransactionResponse()
+        {
+            CreditLimit = creditLimit,
+            Balance = balance,
+        };
+    }
+    
+    // Most performant - delegate validation and transaction computation to DB function
+    public async Task<OneOf<TransactionResponse, NoClientFound, TransactionOutOfLimitAllowedFound>> CreateTransactionByDbFunction(int clientId, TransactionRequest request)
+    {
+        if (request.Type == 'd')
+            request.Value *= -1;
+        
+        var results = await _clientRepository.CreateTransactionByPostgresFunc(clientId, request);
+
+        var status = results.Item1;
+        var creditLimit = results.Item2;
+        var balance = results.Item3;
+        
         if (status == -1)
+            return new NoClientFound();
+        
+        if (status == -2)
             return new TransactionOutOfLimitAllowedFound();
         
         return new TransactionResponse()

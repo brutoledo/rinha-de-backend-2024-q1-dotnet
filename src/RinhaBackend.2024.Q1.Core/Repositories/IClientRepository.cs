@@ -9,4 +9,5 @@ public interface IClientRepository
     Task<ClientExtract?> GetClientExtract(int id);
     Task<int> CreateTransaction(int clientId, TransactionRequest request);
     Task<(int, int, int)> CreateAtomicTransaction(int clientId, TransactionRequest request);
+    Task<(int, int, int)> CreateTransactionByPostgresFunc(int clientId, TransactionRequest request);
 }

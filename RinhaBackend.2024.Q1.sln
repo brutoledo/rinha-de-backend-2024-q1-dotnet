@@ -23,7 +23,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{637E68DD-2CFF-459E-8A74-0ACCB08E279F}"
 	ProjectSection(SolutionItems) = preProject
 		containerization\db\docker-compose.yml = containerization\db\docker-compose.yml
-		containerization\db\init.sql = containerization\db\init.sql
+		containerization\db\runfunction.sql = containerization\db\runfunction.sql
+		containerization\db\01-init.sql = containerization\db\01-init.sql
+		containerization\db\02-functions.sql = containerization\db\02-functions.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx", "nginx", "{50766037-2957-4065-92C4-62CACECF6530}"

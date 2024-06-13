@@ -17,11 +17,11 @@ services:
       - "8081:8080"
     depends_on:
       - db
-    deploy:
-      resources:
-        limits:
-          cpus: "0.4"
-          memory: "110MB"
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "0.3"
+#          memory: "80MB"
 
   api02:
    # Essa sintaxe reusa o que foi declarado em 'api01'.
@@ -42,11 +42,11 @@ services:
    ports:
      # Obrigatório expor/usar a porta 9999 no load balancer!
      - "9999:9999"
-   deploy:
-     resources:
-       limits:
-         cpus: "0.2"
-         memory: "20MB"
+#   deploy:
+#     resources:
+#       limits:
+#         cpus: "0.4"
+#         memory: "134MB"
 
   db:
     image: postgres:latest
@@ -58,16 +58,17 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    deploy:
-      resources:
-        limits:
-          # Note que a soma de todos os limites dos serviços
-          # aqui declarados é de 1.5 unidades de CPU e 550MB
-          # de memória. A distribuição feita aqui é apenas
-          # um exemplo – distribua como quiser.
-          cpus: "0.5"
-          memory: "310MB"
+      - ./db/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./db/02-functions.sql:/docker-entrypoint-initdb.d/02-functions.sql:ro
+#    deploy:
+#      resources:
+#        limits:
+#          # Note que a soma de todos os limites dos serviços
+#          # aqui declarados é de 1.5 unidades de CPU e 550MB
+#          # de memória. A distribuição feita aqui é apenas
+#          # um exemplo – distribua como quiser.
+#          cpus: "0.5"
+#          memory: "256MB"
     healthcheck:
       test: [ "CMD", "pg_isready", "--username", "rinha" ]
       interval: 15s

@@ -30,7 +30,7 @@ public class ClientsController : Controller
     [Route("clientes/{id}/transacoes")]
     public async Task<IActionResult> PostTransaction([FromRoute] int id, [FromBody] TransactionRequest payload)
     {
-        var result = await _bankService.CreateAtomicTransaction(id, payload);
+        var result = await _bankService.CreateTransactionByDbFunction(id, payload);
         return result.Match<IActionResult>(
             transaction => Ok(transaction),
             noClientFound => NotFound(),

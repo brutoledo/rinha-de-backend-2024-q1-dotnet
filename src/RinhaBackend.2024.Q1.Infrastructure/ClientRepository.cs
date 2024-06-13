@@ -112,7 +112,6 @@ public class ClientRepository : IClientRepository
 
     public async Task<(int, int, int)> CreateAtomicTransaction(int clientId, TransactionRequest request)
     {
-        int transactionId;
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             await connection.OpenAsync();
@@ -122,8 +121,8 @@ public class ClientRepository : IClientRepository
                 {
                     // this row level lock prevent another row FOR UPDATE to RUN
                     await connection.ExecuteAsync(@"LOCK TABLE CLIENTS IN ROW EXCLUSIVE MODE", transaction);
+
                     // Lock the row with FOR UPDATE
-                    
                     var rows = await connection.ExecuteScalarAsync<int>(
                         @"SELECT * FROM CLIENTS WHERE ID = @clientId FOR UPDATE",
                         new { clientId }, transaction);
@@ -131,26 +130,22 @@ public class ClientRepository : IClientRepository
                     if (rows == 0)
                     {
                         await transaction.CommitAsync();
-                        return new (0, 0, 0); // not found user
+                        return new(-1, 0, 0); // not found user
                     }
 
-                    var updateBalance = 
+                    var updateBalance =
                         @"UPDATE CLIENTS SET BALANCE = BALANCE + @value WHERE ID = @clientId 
                                                 AND (@value > 0 OR BALANCE + @value >= CREDIT_LIMIT * -1)";
-                    var updatedRows = await connection.ExecuteAsync(updateBalance, new { value = request.Value, clientId },
+                    var updatedRows = await connection.ExecuteAsync(updateBalance,
+                        new { value = request.Value, clientId },
                         transaction);
-                    
-                    //Perform the update
-                    // var updateCommand = new NpgsqlCommand(
-                    //     $"UPDATE CLIENTS SET BALANCE = BALANCE + {request.Value} WHERE ID = {clientId} AND ({request.Value} > 0 OR BALANCE + {request.Value} >= CREDIT_LIMIT)", connection, transaction);
-                    // var updatedRows = await updateCommand.ExecuteNonQueryAsync();
-                    
+
                     if (updatedRows == 0)
                     {
                         await transaction.CommitAsync();
-                        return (-1, 0, 0); // then means user has no limit
+                        return (-2, 0, 0); // then means user has no limit
                     }
-                    
+
                     var insertTransaction = @"INSERT INTO CLIENT_TRANSACTIONS (
                                     CLIENT_ID, VALUE, TYPE, DESCRIPTION)
                                 VALUES (
@@ -159,12 +154,13 @@ public class ClientRepository : IClientRepository
                     var payload = new
                         { clientId, value = request.Value, type = request.Type, description = request.Description };
                     await connection.ExecuteScalarAsync(insertTransaction, payload, transaction);
-                    
+
                     var query = "SELECT ID, NAME, CREDIT_LIMIT as CreditLimit, BALANCE FROM CLIENTS where ID=@id";
-                    var client = await connection.QuerySingleOrDefaultAsync<Client>(query, new { id= clientId }, transaction);
-     
+                    var client =
+                        await connection.QuerySingleOrDefaultAsync<Client>(query, new { id = clientId }, transaction);
+
                     await transaction.CommitAsync();
-                    
+
                     return (1, client.CreditLimit, client.Balance);
                 }
                 catch (Exception e)
@@ -175,6 +171,44 @@ public class ClientRepository : IClientRepository
                     await transaction.RollbackAsync();
                     throw;
                 }
+            }
+        }
+    }
+
+    public async Task<(int, int, int)> CreateTransactionByPostgresFunc(int clientId, TransactionRequest request)
+    {
+        using (var connection = new NpgsqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            try
+            {
+                var result = await connection.QueryFirstOrDefaultAsync<object[]>(
+                    "select createTransaction(@clientId, @transactionValue, @transactionType, @description);",
+                    new
+                    {
+                        clientId,
+                        transactionValue = request.Value,
+                        transactionType = request.Type,
+                        description = request.Description,
+                    });
+
+                if (result is null)
+                    throw new InvalidOperationException("Unexpected null response from create transaction function");
+
+                if (result.Length == 1)
+                {
+                    var failureCode = (int)result[0];
+                    return (failureCode, 0, 0);
+                }
+
+                var balance = (int)result[0];
+                var limit = (int)result[1];
+                return (1, limit, balance);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
         }
     }
